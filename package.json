@@ -4,7 +4,7 @@
   "main": "index.js",
   "repository": "zowe/explorer-fvt-utilities",
   "description": "JES Explorer",
-  "devDependencies": {
+  "peerDependencies": {
     "chai": "^4.2.0",
     "chai-things": "0.2.0",
     "expect": "^1.20.2",
