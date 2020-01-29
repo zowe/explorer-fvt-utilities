@@ -1,7 +1,23 @@
-const {getDriver, loadPage, checkDriver} = require('./DriverUtilities');
+const { 
+    getDriver, 
+    loadPage, 
+    checkDriver 
+} = require('./DriverUtilities');
+
+const { 
+    testElementAppearsXTimesById,
+    testElementAppearsXTimesByCSS,
+    testWindowHeightChangeForcesComponentHeightChange,
+    testTextInputFieldCanBeModified
+} = require('./ElementTestUtilities');
 
 module.exports = {
     getDriver,
     loadPage,
-    checkDriver
+    checkDriver,
+
+    testElementAppearsXTimesById,
+    testElementAppearsXTimesByCSS,
+    testWindowHeightChangeForcesComponentHeightChange,
+    testTextInputFieldCanBeModified,
 };
