@@ -1,3 +1,12 @@
+/**
+ * This program and the accompanying materials are made available under the terms of the
+ * Eclipse Public License v2.0 which accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-v20.html
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Copyright IBM Corporation 2020
+ */
 const { By, until } = require('selenium-webdriver');
 const { expect } = require('chai');
 
@@ -9,9 +18,13 @@ const { expect } = require('chai');
  * @param {int} count expected occurrences
  */
 async function testElementAppearsXTimesById(driver, id, count) {
+    if (count === 0) return testElementIsNotVisibleById(driver, id);
     try {
         const elements = await driver.findElements(By.id(id));
         expect(elements).to.be.an('array').that.has.lengthOf(count);
+        for (const element of elements) {
+            await element.click();
+        }
     } catch (e) {
         return false;
     }
@@ -35,6 +48,23 @@ async function testElementAppearsXTimesByCSS(driver, css, count) {
     return true;
 }
 
+/**
+ * Given a html id find the element and check it is not visible
+ * visibility check is can the element be clicked which will invoke the webdriver element locator function
+ * if element can't be clicked it will throw an exception
+ * 
+ * @param {WebDriver} driver selenium-webdriver
+ * @param {string} id html id
+ */
+async function testElementIsNotVisibleById(driver, id) {
+    try {
+        const element = await driver.findElement(By.id(id));
+        await element.click();
+        return false;
+    } catch (e) {
+        return e.message.includes('could not be scrolled into view');
+    }
+}
 /**
  * Manipulate the window size between 300 & 1000 whilst expecting the height of 
  * a html component changes size accordingly
