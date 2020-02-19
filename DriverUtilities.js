@@ -64,20 +64,17 @@ async function loadPage(driver, page) {
  * @param {String} PASSWORD TSO user password
  * @param {String} SERVER_HOST_NAME hostname or IP of system under test
  * @param {int} SERVER_HTTPS_PORT https port of system under test
+ * @param {String} usernameEndpoint endpoint of username api that can be used to cache login credentials e.g /api/v1/jobs/username
  */
-async function checkDriver(driver, BASE_URL, USERNAME, PASSWORD, SERVER_HOST_NAME, SERVER_HTTPS_PORT) {
+async function checkDriver(driver, BASE_URL, USERNAME, PASSWORD, SERVER_HOST_NAME, SERVER_HTTPS_PORT, usernameEndpoint) {
     assert.isNotEmpty(USERNAME, 'USERNAME is not defined');
     assert.isNotEmpty(PASSWORD, 'PASSWORD is not defined');
     assert.isNotEmpty(SERVER_HOST_NAME, 'SERVER_HOST_NAME is not defined');
     assert.isNotEmpty(SERVER_HTTPS_PORT, 'SERVER_HTTPS_PORT is not defined');
     try {
-        await driver.get(`https://${USERNAME}:${PASSWORD}@${SERVER_HOST_NAME}:${SERVER_HTTPS_PORT}/api/v1/jobs/username`);
+        await driver.get(`https://${USERNAME}:${PASSWORD}@${SERVER_HOST_NAME}:${SERVER_HTTPS_PORT}${usernameEndpoint}`);
         await loadPage(driver, BASE_URL);
-        await driver.wait(until.titleIs('JES Explorer'), 20000);
-        // Ensure expected components have loaded
-        await driver.wait(until.elementLocated(By.id('job-list')), 30000);
-        await driver.wait(until.elementLocated(By.id('embeddedEditor')), 30000);
-        await driver.sleep(5000);
+        await driver.wait(until.titleContains('Explorer'), 20000);
     } catch (e) {
         assert.fail(`Failed to initialise: ${e}`);
     }
