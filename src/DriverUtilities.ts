@@ -7,15 +7,15 @@
  *
  * Copyright IBM Corporation 2020
  */
-const { assert } = require('chai');
+import { assert } from 'chai';
+import { Capabilities, Builder, By, until } from 'selenium-webdriver';
 const firefox = require('selenium-webdriver/firefox');
-const { Capabilities, Builder, By, until } = require('selenium-webdriver');
 
 /**
  * Return a built driver object using firefox
  * Configured to be headless, allow insecure certs always accept alerts
  */
-async function getDriver() {
+export async function getDriver() {
     // configure Options
     const options = new firefox.Options();
     options.setPreference('dom.disable_beforeunload', true);
@@ -45,7 +45,7 @@ async function getDriver() {
  * @param {WebDriver} driver selenium-webdriver
  * @param {String} page URL of a page to load
  */
-async function loadPage(driver, page) {
+export async function loadPage(driver, page) {
     await driver.manage().window().setRect({ width: 1600, height: 800 });
     console.log(`Loading page: ${page}`);
     await driver.get(page);
@@ -66,7 +66,7 @@ async function loadPage(driver, page) {
  * @param {int} SERVER_HTTPS_PORT https port of system under test
  * @param {String} usernameEndpoint endpoint of username api that can be used to cache login credentials e.g /api/v1/jobs/username
  */
-async function checkDriver(driver, BASE_URL, USERNAME, PASSWORD, SERVER_HOST_NAME, SERVER_HTTPS_PORT, usernameEndpoint) {
+export async function checkDriver(driver, BASE_URL, USERNAME, PASSWORD, SERVER_HOST_NAME, SERVER_HTTPS_PORT, usernameEndpoint) {
     assert.isNotEmpty(USERNAME, 'USERNAME is not defined');
     assert.isNotEmpty(PASSWORD, 'PASSWORD is not defined');
     assert.isNotEmpty(SERVER_HOST_NAME, 'SERVER_HOST_NAME is not defined');
@@ -78,10 +78,4 @@ async function checkDriver(driver, BASE_URL, USERNAME, PASSWORD, SERVER_HOST_NAM
     } catch (e) {
         assert.fail(`Failed to initialise: ${e}`);
     }
-}
-
-module.exports = {
-    getDriver,
-    loadPage,
-    checkDriver,
 }

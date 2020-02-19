@@ -7,8 +7,8 @@
  *
  * Copyright IBM Corporation 2020
  */
-const { By, until } = require('selenium-webdriver');
-const { expect } = require('chai');
+import { By, WebDriver } from 'selenium-webdriver';
+import { expect } from 'chai';
 
 /**
  * Given a html id attribute find the component and expect it to be present count times
@@ -17,7 +17,7 @@ const { expect } = require('chai');
  * @param {string} id html id
  * @param {int} count expected occurrences
  */
-async function testElementAppearsXTimesById(driver, id, count) {
+export async function testElementAppearsXTimesById(driver :WebDriver, id :string, count :number) {
     if (count === 0) return testElementIsNotVisibleById(driver, id);
     try {
         const elements = await driver.findElements(By.id(id));
@@ -38,7 +38,7 @@ async function testElementAppearsXTimesById(driver, id, count) {
  * @param {string} css html css path
  * @param {int} count expected occurrences
  */
-async function testElementAppearsXTimesByCSS(driver, css, count) {
+export async function testElementAppearsXTimesByCSS(driver :WebDriver, css :string, count :number) {
     try {
         const elements = await driver.findElements(By.css(css));
         expect(elements).to.be.an('array').that.has.lengthOf(count);
@@ -56,7 +56,7 @@ async function testElementAppearsXTimesByCSS(driver, css, count) {
  * @param {WebDriver} driver selenium-webdriver
  * @param {string} id html id
  */
-async function testElementIsNotVisibleById(driver, id) {
+export async function testElementIsNotVisibleById(driver :WebDriver, id :string) {
     try {
         const element = await driver.findElement(By.id(id));
         await element.click();
@@ -73,7 +73,7 @@ async function testElementIsNotVisibleById(driver, id) {
  * @param {String} componentId html id attribute of component under test
  * @param {int} offset offset of browser and other components
  */
-async function testWindowHeightChangeForcesComponentHeightChange(driver, componentId, offset) {
+export async function testWindowHeightChangeForcesComponentHeightChange(driver :WebDriver, componentId :string, offset :number) {
     let allResized = true;
     for (let i = 300; i <= 1000 && allResized; i += 100) {
         await driver.manage().window().setRect({ width: 1600, height: i });
@@ -95,7 +95,7 @@ async function testWindowHeightChangeForcesComponentHeightChange(driver, compone
  * @param {string} id html id
  * @param {string} replaceText optional replace text, defaults to "TEST"
  */
-async function testTextInputFieldCanBeModified(driver, id, replaceText = 'TEST') {
+export async function testTextInputFieldCanBeModified(driver :WebDriver, id :string, replaceText :string = 'TEST') {
     try {
         const element = await driver.findElement(By.id(id));
         await element.clear();
@@ -104,11 +104,4 @@ async function testTextInputFieldCanBeModified(driver, id, replaceText = 'TEST')
         return false;
     }
     return true;
-}
-
-module.exports = {
-    testElementAppearsXTimesById,
-    testElementAppearsXTimesByCSS,
-    testWindowHeightChangeForcesComponentHeightChange,
-    testTextInputFieldCanBeModified,
 }
