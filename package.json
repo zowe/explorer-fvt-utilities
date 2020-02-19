@@ -4,7 +4,7 @@
   "main": "lib/index.js",
   "repository": "zowe/explorer-fvt-utilities",
   "description": "Zowe explorer app test utilities",
-  "peerDependencies": { 
+  "peerDependencies": {
     "geckodriver": "^1.19.1",
     "mocha": "^6.1.4",
     "selenium-webdriver": "^4.0.0-alpha.1"
