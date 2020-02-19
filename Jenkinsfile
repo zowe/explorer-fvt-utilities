@@ -26,7 +26,9 @@ node('ibm-jenkins-slave-nvm') {
   // build stage is required
   pipeline.build(
     operation: {
-      echo "build holder, nothing to do right now"
+      ansiColor('xterm') {
+        sh "npm run build"
+      }
     }
   )
 
