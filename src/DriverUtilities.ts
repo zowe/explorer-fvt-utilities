@@ -70,7 +70,7 @@ export async function checkDriver(driver :WebDriver, BASE_URL :string,
     assert.isNotEmpty(USERNAME, 'USERNAME is not defined');
     assert.isNotEmpty(PASSWORD, 'PASSWORD is not defined');
     assert.isNotEmpty(SERVER_HOST_NAME, 'SERVER_HOST_NAME is not defined');
-    assert.isNotEmpty(SERVER_HTTPS_PORT, 'SERVER_HTTPS_PORT is not defined');
+    assert.isNumber(SERVER_HTTPS_PORT, 'SERVER_HTTPS_PORT is not defined');
     try {
         await driver.get(`https://${USERNAME}:${PASSWORD}@${SERVER_HOST_NAME}:${SERVER_HTTPS_PORT}${usernameEndpoint}`);
         await loadPage(driver, BASE_URL);
