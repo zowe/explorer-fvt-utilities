@@ -8,7 +8,7 @@
  * Copyright IBM Corporation 2020
  */
 import { assert } from 'chai';
-import { Capabilities, Builder, By, until } from 'selenium-webdriver';
+import { Capabilities, Builder, By, until, WebDriver } from 'selenium-webdriver';
 const firefox = require('selenium-webdriver/firefox');
 
 /**
@@ -34,18 +34,16 @@ export async function getDriver() {
         .forBrowser('firefox')
         .withCapabilities(capabilities);
     driver = driver.setFirefoxOptions(options).setFirefoxService(service);
-    driver = driver.build();
-
-    return driver;
+    return driver.build();
 }
 
 /**
  * Given a WebDriver and URL load the page and print the title
  * 
  * @param {WebDriver} driver selenium-webdriver
- * @param {String} page URL of a page to load
+ * @param {string} page URL of a page to load
  */
-export async function loadPage(driver, page) {
+export async function loadPage(driver :WebDriver, page :string) {
     await driver.manage().window().setRect({ width: 1600, height: 800 });
     console.log(`Loading page: ${page}`);
     await driver.get(page);
@@ -59,14 +57,16 @@ export async function loadPage(driver, page) {
  * Check page title matches expected and expected elements are present
  * 
  * @param {WebDriver} driver selenium-webdriver
- * @param {String} BASE_URL url of home page
- * @param {String} USERNAME TSO user id
- * @param {String} PASSWORD TSO user password
- * @param {String} SERVER_HOST_NAME hostname or IP of system under test
- * @param {int} SERVER_HTTPS_PORT https port of system under test
- * @param {String} usernameEndpoint endpoint of username api that can be used to cache login credentials e.g /api/v1/jobs/username
+ * @param {string} BASE_URL url of home page
+ * @param {string} USERNAME TSO user id
+ * @param {string} PASSWORD TSO user password
+ * @param {string} SERVER_HOST_NAME hostname or IP of system under test
+ * @param {number} SERVER_HTTPS_PORT https port of system under test
+ * @param {string} usernameEndpoint endpoint of username api that can be used to cache login credentials e.g /api/v1/jobs/username
  */
-export async function checkDriver(driver, BASE_URL, USERNAME, PASSWORD, SERVER_HOST_NAME, SERVER_HTTPS_PORT, usernameEndpoint) {
+export async function checkDriver(driver :WebDriver, BASE_URL :string, 
+    USERNAME :string, PASSWORD :string, SERVER_HOST_NAME :string, SERVER_HTTPS_PORT :number, 
+    usernameEndpoint :string) {
     assert.isNotEmpty(USERNAME, 'USERNAME is not defined');
     assert.isNotEmpty(PASSWORD, 'PASSWORD is not defined');
     assert.isNotEmpty(SERVER_HOST_NAME, 'SERVER_HOST_NAME is not defined');
