@@ -2,6 +2,7 @@
   "name": "explorer-fvt-utilities",
   "version": "0.0.4",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "zowe/explorer-fvt-utilities",
   "description": "Zowe explorer app test utilities",
   "author": "IBM",
