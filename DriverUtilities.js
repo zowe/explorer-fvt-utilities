@@ -59,25 +59,22 @@ async function loadPage(driver, page) {
  * Check page title matches expected and expected elements are present
  * 
  * @param {WebDriver} driver selenium-webdriver
- * @param {String} BASE_URL url of home page
- * @param {String} USERNAME TSO user id
- * @param {String} PASSWORD TSO user password
- * @param {String} SERVER_HOST_NAME hostname or IP of system under test
- * @param {int} SERVER_HTTPS_PORT https port of system under test
+ * @param {String} baseUrl url of home page
+ * @param {String} username TSO user id
+ * @param {String} password TSO user password
+ * @param {String} serverHostName hostname or IP of system under test
+ * @param {int} serverHttpsPort https port of system under test
+ * @param {String} usernameEndpoint endpoint of username api that can be used to cache login credentials e.g /api/v1/jobs/username
  */
-async function checkDriver(driver, BASE_URL, USERNAME, PASSWORD, SERVER_HOST_NAME, SERVER_HTTPS_PORT) {
-    assert.isNotEmpty(USERNAME, 'USERNAME is not defined');
-    assert.isNotEmpty(PASSWORD, 'PASSWORD is not defined');
-    assert.isNotEmpty(SERVER_HOST_NAME, 'SERVER_HOST_NAME is not defined');
-    assert.isNotEmpty(SERVER_HTTPS_PORT, 'SERVER_HTTPS_PORT is not defined');
+async function checkDriver(driver, baseURL, username, password, serverHostName, serverHttpsPort, usernameEndpoint) {
+    assert.isNotEmpty(username, 'USERNAME is not defined');
+    assert.isNotEmpty(password, 'PASSWORD is not defined');
+    assert.isNotEmpty(serverHostName, 'SERVER_HOST_NAME is not defined');
+    assert.isNotEmpty(serverHttpsPort, 'SERVER_HTTPS_PORT is not defined');
     try {
-        await driver.get(`https://${USERNAME}:${PASSWORD}@${SERVER_HOST_NAME}:${SERVER_HTTPS_PORT}/api/v1/jobs/username`);
-        await loadPage(driver, BASE_URL);
-        await driver.wait(until.titleIs('JES Explorer'), 20000);
-        // Ensure expected components have loaded
-        await driver.wait(until.elementLocated(By.id('job-list')), 30000);
-        await driver.wait(until.elementLocated(By.id('embeddedEditor')), 30000);
-        await driver.sleep(5000);
+        await driver.get(`https://${username}:${password}@${serverHostName}:${serverHttpsPort}${usernameEndpoint}`);
+        await loadPage(driver, baseURL);
+        await driver.wait(until.titleContains('Explorer'), 20000);
     } catch (e) {
         assert.fail(`Failed to initialise: ${e}`);
     }
