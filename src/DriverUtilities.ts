@@ -51,7 +51,6 @@ export async function loadPage(driver :WebDriver, page :string) {
     console.log(`Page title: ${pageTitle}`);
 }
 
-//TODO:: Refactor to remove jes explorer specific checks
 /**
  * Given a WebDriver and system information load the page with credentials
  * Check page title matches expected and expected elements are present
@@ -67,10 +66,6 @@ export async function loadPage(driver :WebDriver, page :string) {
 export async function checkDriver(driver :WebDriver, baseURL :string, 
     username :string, password :string, serverHostName :string, serverHttpsPort :number, 
     usernameEndpoint :string) {
-    assert.isNotEmpty(username, 'USERNAME is not defined');
-    assert.isNotEmpty(password, 'PASSWORD is not defined');
-    assert.isNotEmpty(serverHostName, 'SERVER_HOST_NAME is not defined');
-    assert.isNumber(serverHttpsPort, 'SERVER_HTTPS_PORT is not defined');
     try {
         await driver.get(`https://${username}:${password}@${serverHostName}:${serverHttpsPort}${usernameEndpoint}`);
         await loadPage(driver, baseURL);
