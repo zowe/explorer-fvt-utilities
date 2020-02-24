@@ -57,23 +57,23 @@ export async function loadPage(driver :WebDriver, page :string) {
  * Check page title matches expected and expected elements are present
  * 
  * @param {WebDriver} driver selenium-webdriver
- * @param {string} BASE_URL url of home page
- * @param {string} USERNAME TSO user id
- * @param {string} PASSWORD TSO user password
- * @param {string} SERVER_HOST_NAME hostname or IP of system under test
- * @param {number} SERVER_HTTPS_PORT https port of system under test
+ * @param {string} baseURL url of home page
+ * @param {string} username TSO user id
+ * @param {string} password TSO user password
+ * @param {string} serverHostNAme hostname or IP of system under test
+ * @param {number} serverHttpsPort https port of system under test
  * @param {string} usernameEndpoint endpoint of username api that can be used to cache login credentials e.g /api/v1/jobs/username
  */
-export async function checkDriver(driver :WebDriver, BASE_URL :string, 
-    USERNAME :string, PASSWORD :string, SERVER_HOST_NAME :string, SERVER_HTTPS_PORT :number, 
+export async function checkDriver(driver :WebDriver, baseURL :string, 
+    username :string, password :string, serverHostNAme :string, serverHttpsPort :number, 
     usernameEndpoint :string) {
-    assert.isNotEmpty(USERNAME, 'USERNAME is not defined');
-    assert.isNotEmpty(PASSWORD, 'PASSWORD is not defined');
-    assert.isNotEmpty(SERVER_HOST_NAME, 'SERVER_HOST_NAME is not defined');
-    assert.isNumber(SERVER_HTTPS_PORT, 'SERVER_HTTPS_PORT is not defined');
+    assert.isNotEmpty(username, 'USERNAME is not defined');
+    assert.isNotEmpty(password, 'PASSWORD is not defined');
+    assert.isNotEmpty(serverHostNAme, 'SERVER_HOST_NAME is not defined');
+    assert.isNumber(serverHttpsPort, 'SERVER_HTTPS_PORT is not defined');
     try {
-        await driver.get(`https://${USERNAME}:${PASSWORD}@${SERVER_HOST_NAME}:${SERVER_HTTPS_PORT}${usernameEndpoint}`);
-        await loadPage(driver, BASE_URL);
+        await driver.get(`https://${username}:${password}@${serverHostNAme}:${serverHttpsPort}${usernameEndpoint}`);
+        await loadPage(driver, baseURL);
         await driver.wait(until.titleContains('Explorer'), 20000);
     } catch (e) {
         assert.fail(`Failed to initialise: ${e}`);
