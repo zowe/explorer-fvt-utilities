@@ -1,6 +1,6 @@
 {
   "name": "explorer-fvt-utilities",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "index.js",
   "repository": "zowe/explorer-fvt-utilities",
   "description": "JES Explorer",
