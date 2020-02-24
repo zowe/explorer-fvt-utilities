@@ -60,19 +60,19 @@ export async function loadPage(driver :WebDriver, page :string) {
  * @param {string} baseURL url of home page
  * @param {string} username TSO user id
  * @param {string} password TSO user password
- * @param {string} serverHostNAme hostname or IP of system under test
+ * @param {string} serverHostName hostname or IP of system under test
  * @param {number} serverHttpsPort https port of system under test
  * @param {string} usernameEndpoint endpoint of username api that can be used to cache login credentials e.g /api/v1/jobs/username
  */
 export async function checkDriver(driver :WebDriver, baseURL :string, 
-    username :string, password :string, serverHostNAme :string, serverHttpsPort :number, 
+    username :string, password :string, serverHostName :string, serverHttpsPort :number, 
     usernameEndpoint :string) {
     assert.isNotEmpty(username, 'USERNAME is not defined');
     assert.isNotEmpty(password, 'PASSWORD is not defined');
-    assert.isNotEmpty(serverHostNAme, 'SERVER_HOST_NAME is not defined');
+    assert.isNotEmpty(serverHostName, 'SERVER_HOST_NAME is not defined');
     assert.isNumber(serverHttpsPort, 'SERVER_HTTPS_PORT is not defined');
     try {
-        await driver.get(`https://${username}:${password}@${serverHostNAme}:${serverHttpsPort}${usernameEndpoint}`);
+        await driver.get(`https://${username}:${password}@${serverHostName}:${serverHttpsPort}${usernameEndpoint}`);
         await loadPage(driver, baseURL);
         await driver.wait(until.titleContains('Explorer'), 20000);
     } catch (e) {
