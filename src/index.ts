@@ -7,26 +7,15 @@
  *
  * Copyright IBM Corporation 2020
  */
-const { 
+export { 
     getDriver, 
     loadPage, 
     checkDriver 
-} = require('./DriverUtilities');
+} from './DriverUtilities';
 
-const { 
+export { 
     testElementAppearsXTimesById,
     testElementAppearsXTimesByCSS,
     testWindowHeightChangeForcesComponentHeightChange,
     testTextInputFieldCanBeModified
-} = require('./ElementTestUtilities');
-
-module.exports = {
-    getDriver,
-    loadPage,
-    checkDriver,
-
-    testElementAppearsXTimesById,
-    testElementAppearsXTimesByCSS,
-    testWindowHeightChangeForcesComponentHeightChange,
-    testTextInputFieldCanBeModified,
-};
+} from './ElementTestUtilities';

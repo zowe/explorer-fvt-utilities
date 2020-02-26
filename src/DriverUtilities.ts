@@ -7,15 +7,15 @@
  *
  * Copyright IBM Corporation 2020
  */
-const { assert } = require('chai');
+import { assert } from 'chai';
+import { Capabilities, Builder, By, until, WebDriver } from 'selenium-webdriver';
 const firefox = require('selenium-webdriver/firefox');
-const { Capabilities, Builder, By, until } = require('selenium-webdriver');
 
 /**
  * Return a built driver object using firefox
  * Configured to be headless, allow insecure certs always accept alerts
  */
-async function getDriver() {
+export async function getDriver() {
     // configure Options
     const options = new firefox.Options();
     options.setPreference('dom.disable_beforeunload', true);
@@ -34,18 +34,16 @@ async function getDriver() {
         .forBrowser('firefox')
         .withCapabilities(capabilities);
     driver = driver.setFirefoxOptions(options).setFirefoxService(service);
-    driver = driver.build();
-
-    return driver;
+    return driver.build();
 }
 
 /**
  * Given a WebDriver and URL load the page and print the title
  * 
  * @param {WebDriver} driver selenium-webdriver
- * @param {String} page URL of a page to load
+ * @param {string} page URL of a page to load
  */
-async function loadPage(driver, page) {
+export async function loadPage(driver :WebDriver, page :string) {
     await driver.manage().window().setRect({ width: 1600, height: 800 });
     console.log(`Loading page: ${page}`);
     await driver.get(page);
@@ -53,24 +51,21 @@ async function loadPage(driver, page) {
     console.log(`Page title: ${pageTitle}`);
 }
 
-//TODO:: Refactor to remove jes explorer specific checks
 /**
  * Given a WebDriver and system information load the page with credentials
  * Check page title matches expected and expected elements are present
  * 
  * @param {WebDriver} driver selenium-webdriver
- * @param {String} baseUrl url of home page
- * @param {String} username TSO user id
- * @param {String} password TSO user password
- * @param {String} serverHostName hostname or IP of system under test
- * @param {int} serverHttpsPort https port of system under test
- * @param {String} usernameEndpoint endpoint of username api that can be used to cache login credentials e.g /api/v1/jobs/username
+ * @param {string} baseURL url of home page
+ * @param {string} username TSO user id
+ * @param {string} password TSO user password
+ * @param {string} serverHostName hostname or IP of system under test
+ * @param {number} serverHttpsPort https port of system under test
+ * @param {string} usernameEndpoint endpoint of username api that can be used to cache login credentials e.g /api/v1/jobs/username
  */
-async function checkDriver(driver, baseURL, username, password, serverHostName, serverHttpsPort, usernameEndpoint) {
-    assert.isNotEmpty(username, 'USERNAME is not defined');
-    assert.isNotEmpty(password, 'PASSWORD is not defined');
-    assert.isNotEmpty(serverHostName, 'SERVER_HOST_NAME is not defined');
-    assert.isNotEmpty(serverHttpsPort, 'SERVER_HTTPS_PORT is not defined');
+export async function checkDriver(driver :WebDriver, baseURL :string, 
+    username :string, password :string, serverHostName :string, serverHttpsPort :number, 
+    usernameEndpoint :string) {
     try {
         await driver.get(`https://${username}:${password}@${serverHostName}:${serverHttpsPort}${usernameEndpoint}`);
         await loadPage(driver, baseURL);
@@ -78,10 +73,4 @@ async function checkDriver(driver, baseURL, username, password, serverHostName, 
     } catch (e) {
         assert.fail(`Failed to initialise: ${e}`);
     }
-}
-
-module.exports = {
-    getDriver,
-    loadPage,
-    checkDriver,
 }
