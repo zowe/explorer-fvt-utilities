@@ -62,6 +62,7 @@ export async function loadPage(driver :WebDriver, page :string) {
  */
 export async function setApimlAuthTokenCookie(driver :WebDriver, username :string, password :string, loginEndpoint :string, appPageUrl : string){
     await loadPage(driver, appPageUrl); // Make sure we're on the correct domain to set the cookie
+    console.log('Authentication endpoint: ' + loginEndpoint);
     const agent = new https.Agent({
         rejectUnauthorized: false,
     });
@@ -75,7 +76,7 @@ export async function setApimlAuthTokenCookie(driver :WebDriver, username :strin
         if (response.ok) {
             return response.headers.get("set-cookie");
         }
-        throw Error('Unable to authenticate');
+        throw Error('Unable to authenticate: ' + response.status + ' - ' + response.statusText);
     }).then(cookies => {
         if (cookies) {
             const cookiesArray = cookies.split(';');
