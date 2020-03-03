@@ -9,6 +9,8 @@
  */
 import { assert } from 'chai';
 import { Capabilities, Builder, By, until, WebDriver } from 'selenium-webdriver';
+import https = require('https');
+import fetch from 'node-fetch';
 const firefox = require('selenium-webdriver/firefox');
 
 /**
@@ -49,6 +51,46 @@ export async function loadPage(driver :WebDriver, page :string) {
     await driver.get(page);
     const pageTitle = await driver.getTitle();
     console.log(`Page title: ${pageTitle}`);
+}
+
+/**
+ * Given a WebDriver and system information load the page, send a post to login endpoint
+ * get apimlauAuthenticationToken and set it as a cookie for the domain
+ * @param username tso username
+ * @param password tso password
+ * @param driver selenium-webdriver
+ */
+export async function setApimlAuthTokenCookie(driver :WebDriver, username :string, password :string, loginEndpoint :string, appPageUrl : string){
+    await loadPage(driver, appPageUrl); // Make sure we're on the correct domain to set the cookie
+    const agent = new https.Agent({
+        rejectUnauthorized: false,
+    });
+    await fetch(loginEndpoint, 
+        {
+            method: 'POST', 
+            body: JSON.stringify({username, password}),
+            agent,
+        }
+    ).then(response => {
+        if (response.ok) {
+            return response.headers.get("set-cookie");
+        }
+        throw Error('Unable to authenticate');
+    }).then(cookies => {
+        if (cookies) {
+            const cookiesArray = cookies.split(';');
+            const tokenCookie = cookiesArray.find((cookie :string)=> { return cookie.includes('apimlAuthenticationToken')});
+            if (tokenCookie) {
+                const authToken = tokenCookie.split('=')[1];
+                return authToken;
+            }
+        }
+    }).then (async (authToken) => {
+        if (authToken){
+            await driver.manage().addCookie({ name: 'apimlAuthenticationToken', value: authToken });
+        }
+    });
+    await loadPage(driver, appPageUrl);
 }
 
 /**

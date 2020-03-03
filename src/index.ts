@@ -10,7 +10,8 @@
 export { 
     getDriver, 
     loadPage, 
-    checkDriver 
+    checkDriver,
+    setApimlAuthTokenCookie,
 } from './DriverUtilities';
 
 export { 
