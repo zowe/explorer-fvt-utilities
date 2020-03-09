@@ -7,7 +7,7 @@
  *
  * Copyright IBM Corporation 2020
  */
-import { By, WebDriver } from 'selenium-webdriver';
+import { By, WebDriver, until } from 'selenium-webdriver';
 import { expect } from 'chai';
 
 /**
@@ -20,6 +20,7 @@ import { expect } from 'chai';
 export async function testElementAppearsXTimesById(driver :WebDriver, id :string, count :number) {
     if (count === 0) return testElementIsNotVisibleById(driver, id);
     try {
+        await driver.wait(until.elementLocated(By.id(id)));
         const elements = await driver.findElements(By.id(id));
         expect(elements).to.be.an('array').that.has.lengthOf(count);
         for (const element of elements) {
@@ -40,6 +41,7 @@ export async function testElementAppearsXTimesById(driver :WebDriver, id :string
  */
 export async function testElementAppearsXTimesByCSS(driver :WebDriver, css :string, count :number) {
     try {
+        await driver.wait(until.elementLocated(By.css(css)));
         const elements = await driver.findElements(By.css(css));
         expect(elements).to.be.an('array').that.has.lengthOf(count);
     } catch (e) {
