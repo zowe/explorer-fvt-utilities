@@ -20,7 +20,7 @@ import { expect } from 'chai';
 export async function testElementAppearsXTimesById(driver :WebDriver, id :string, count :number) {
     if (count === 0) return testElementIsNotVisibleById(driver, id);
     try {
-        await driver.wait(until.elementLocated(By.id(id)));
+        await driver.wait(until.elementLocated(By.id(id)), 10000);
         const elements = await driver.findElements(By.id(id));
         expect(elements).to.be.an('array').that.has.lengthOf(count);
         for (const element of elements) {
@@ -41,7 +41,7 @@ export async function testElementAppearsXTimesById(driver :WebDriver, id :string
  */
 export async function testElementAppearsXTimesByCSS(driver :WebDriver, css :string, count :number) {
     try {
-        await driver.wait(until.elementLocated(By.css(css)));
+        await driver.wait(until.elementLocated(By.css(css)), 10000);
         const elements = await driver.findElements(By.css(css));
         expect(elements).to.be.an('array').that.has.lengthOf(count);
     } catch (e) {
