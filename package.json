@@ -1,21 +1,31 @@
 {
   "name": "explorer-fvt-utilities",
-  "version": "0.0.2",
-  "main": "index.js",
+  "version": "1.0.1",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "zowe/explorer-fvt-utilities",
-  "description": "JES Explorer",
-  "peerDependencies": {
-    "chai": "^4.2.0",
-    "chai-things": "0.2.0",
-    "expect": "^1.20.2",
-    "geckodriver": "^1.19.1",
-    "mocha": "^6.1.4",
-    "selenium-webdriver": "^4.0.0-alpha.1"
-  },
-  "scripts": {},
+  "description": "Zowe explorer app test utilities",
   "author": "IBM",
   "license": "EPL-2.0",
   "publishConfig": {
     "registry": "https://zowe.jfrog.io/zowe/api/npm/npm-local-release/"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.9",
+    "@types/node": "^13.7.4",
+    "@types/selenium-webdriver": "^4.0.8",
+    "chai": "^4.2.0",
+    "chai-things": "0.2.0",
+    "expect": "^1.20.2",
+    "node-fetch": "^2.6.0",
+    "typescript": "^3.7.5"
+  },
+  "peerDependencies": {
+    "geckodriver": "^1.19.1",
+    "mocha": "^6.1.4",
+    "selenium-webdriver": "^4.0.0-alpha.1"
   }
 }
