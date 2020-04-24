@@ -40,6 +40,7 @@ export async function testElementAppearsXTimesById(driver :WebDriver, id :string
  * @param {int} count expected occurrences
  */
 export async function testElementAppearsXTimesByCSS(driver :WebDriver, css :string, count :number) {
+    if (count === 0) return testElementIsNotVisibleByCss(driver, css);
     try {
         await driver.wait(until.elementLocated(By.css(css)), 10000);
         const elements = await driver.findElements(By.css(css));
@@ -54,9 +55,6 @@ export async function testElementAppearsXTimesByCSS(driver :WebDriver, css :stri
  * Given a html id find the element and check it is not visible
  * visibility check is can the element be clicked which will invoke the webdriver element locator function
  * if element can't be clicked it will throw an exception
- * 
- * @param {WebDriver} driver selenium-webdriver
- * @param {string} id html id
  */
 export async function testElementIsNotVisibleById(driver :WebDriver, id :string) {
     try {
@@ -67,6 +65,22 @@ export async function testElementIsNotVisibleById(driver :WebDriver, id :string)
         return e.message.includes('could not be scrolled into view');
     }
 }
+
+/**
+ * Given a html css path find the element and check it is not visible
+ * visibility check is can the element be clicked which will invoke the webdriver element locator function
+ * if element can't be clicked it will throw an exception
+ */
+export async function testElementIsNotVisibleByCss(driver :WebDriver, css :string) {
+    try {
+        const element = await driver.findElement(By.css(css));
+        await element.click();
+        return false;
+    } catch (e) {
+        return e.message.includes('could not be scrolled into view');
+    }
+}
+
 /**
  * Manipulate the window size between 300 & 1000 whilst expecting the height of 
  * a html component changes size accordingly
