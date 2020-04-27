@@ -16,7 +16,7 @@ SCRIPT_NAME=$(basename "$0")
 DEFAULT_FVT_DISCOVERY_PORT=7552
 DEFAULT_FVT_CATALOG_PORT=7553
 DEFAULT_FVT_GATEWAY_PORT=7554
-DEFAULT_FVT_ML_DEBUG_PROFILES=""
+DEFAULT_FVT_ML_DEBUG_PROFILES="default"
 
 ################################################################################
 # variables
@@ -36,7 +36,7 @@ if [ -z "${FVT_GATEWAY_PORT}" ]; then
   FVT_GATEWAY_PORT="${DEFAULT_FVT_GATEWAY_PORT}"
 fi
 if [ -z "${API_ML_DEBUG_PROFILES}" ]; then
-  FVT_GATEWAY_PORT="${DEFAULT_FVT_ML_DEBUG_PROFILES}"
+  API_ML_DEBUG_PROFILES="${DEFAULT_FVT_ML_DEBUG_PROFILES}"
 fi
 # validate
 if [ -z "${APIML_ROOT_DIR}" ]; then
