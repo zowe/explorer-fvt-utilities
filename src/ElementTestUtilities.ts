@@ -62,7 +62,7 @@ export async function testElementIsNotVisibleById(driver :WebDriver, id :string)
         await element.click();
         return false;
     } catch (e) {
-        return e.message.includes('could not be scrolled into view');
+        return e.message.includes('could not be scrolled into view') || e.message.includes('Unable to locate element:');
     }
 }
 
@@ -77,7 +77,7 @@ export async function testElementIsNotVisibleByCss(driver :WebDriver, css :strin
         await element.click();
         return false;
     } catch (e) {
-        return e.message.includes('could not be scrolled into view');
+        return e.message.includes('could not be scrolled into view')  || e.message.includes('Unable to locate element:');
     }
 }
 
