@@ -11,18 +11,66 @@ import { assert } from 'chai';
 import { Capabilities, Builder, By, until, WebDriver } from 'selenium-webdriver';
 import https = require('https');
 import fetch from 'node-fetch';
-const firefox = require('selenium-webdriver/firefox');
 
-/**
- * Return a built driver object using firefox
- * Configured to be headless, allow insecure certs always accept alerts
- */
-export async function getDriver() {
+require('geckodriver');
+// require('chromedriver');
+
+const firefox = require('selenium-webdriver/firefox');
+// const chrome = require('selenium-webdriver/chrome');
+
+
+interface DriverSettings {
+    headless: Boolean;
+}
+
+const defaultSettings: DriverSettings = {headless: true};
+
+/*async function getChromeDriver(driverSettings: DriverSettings) {
+
+    const {headless} = driverSettings;
+
+    // configure Options
+    const options = new chrome.Options();
+    options.addArguments("--log-level=3");
+    options.addArguments("--silent");
+    // options.setPreference('dom.disable_beforeunload', true);
+
+    // use headless mode
+    if(headless) {
+        options.headless();
+    }
+
+    const capabilities = Capabilities.chrome();
+    capabilities.setAcceptInsecureCerts(true);
+    capabilities.setAlertBehavior('accept');
+
+    // configure ServiceBuilder
+    const service = chrome.setDefaultService(
+        new chrome.ServiceBuilder().build()
+    )
+
+    // build driver using options and service
+    let driver = await new Builder()
+        .forBrowser('chrome')
+        .withCapabilities(capabilities)
+        .setChromeOptions(options)
+        .setChromeService(service)
+        .build();
+
+    return driver;
+}*/
+
+export async function getFirefoxDriver(driverSettings: DriverSettings) {
+
+    const {headless} = driverSettings;
+
     // configure Options
     const options = new firefox.Options();
     options.setPreference('dom.disable_beforeunload', true);
     // use headless mode
-    options.headless();
+    if(headless) {
+        options.headless();
+    }
 
     const capabilities = Capabilities.firefox();
     capabilities.setAcceptInsecureCerts(true);
@@ -39,6 +87,25 @@ export async function getDriver() {
     return driver.build();
 }
 
+/**
+ * Return a built driver object using firefox
+ * Configured to be headless, allow insecure certs always accept alerts
+ */
+export async function getDriver(testBrowser: string = 'firefox', driverSettings: DriverSettings = defaultSettings) {
+    console.log(`Browser: ${testBrowser}`);
+
+    let driver;
+    if (testBrowser === 'firefox') {
+        driver = await getFirefoxDriver(driverSettings);
+    } 
+    /*else if (testBrowser === 'chrome') {
+        driver = await getChromeDriver(driverSettings);
+    }*/
+    else {
+        assert.isTrue(false, `Unsupported browser ${testBrowser}`);
+    }
+    return driver;
+}
 /**
  * Given a WebDriver and URL load the page and print the title
  * 
@@ -108,7 +175,7 @@ export async function setApimlAuthTokenCookie(driver :WebDriver, username :strin
  */
 export async function checkDriver(driver :WebDriver, baseURL :string, 
     username :string, password :string, serverHostName :string, serverHttpsPort :number, 
-    usernameEndpoint :string) {
+    usernameEndpoint :string, testBrowser: string) {
     try {
         await driver.get(`https://${username}:${password}@${serverHostName}:${serverHttpsPort}${usernameEndpoint}`);
         await loadPage(driver, baseURL);
