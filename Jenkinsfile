@@ -17,6 +17,7 @@ node('ibm-jenkins-slave-nvm') {
 
   pipeline.setup(
     packageName: 'org.zowe.explorer-fvt-utilities',
+    nodeJsVersion: 'v10.18.1',
     publishRegistry: [
       email                      : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_EMAIL,
       usernamePasswordCredential : lib.Constants.DEFAULT_LFJ_NPM_PRIVATE_REGISTRY_CREDENTIAL,
@@ -27,7 +28,7 @@ node('ibm-jenkins-slave-nvm') {
   pipeline.build(
     operation: {
       ansiColor('xterm') {
-        sh "npm run build"
+        pipeline.nvmShell "npm run build"
       }
     }
   )
