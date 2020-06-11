@@ -19,13 +19,13 @@ const firefox = require('selenium-webdriver/firefox');
 const chrome = require('selenium-webdriver/chrome');
 
 
-interface DriverSettings {
+export interface IDriverSetting {
     headless: Boolean;
 }
 
-const defaultSettings: DriverSettings = {headless: true};
+const DEFAULT_DRIVER_SETTING: IDriverSetting = {headless: true};
 
-async function getChromeDriver(driverSettings: DriverSettings) {
+async function getChromeDriver(driverSettings: IDriverSetting): Promise<WebDriver> {
 
     const {headless} = driverSettings;
 
@@ -60,7 +60,7 @@ async function getChromeDriver(driverSettings: DriverSettings) {
     return driver;
 }
 
-export async function getFirefoxDriver(driverSettings: DriverSettings) {
+export async function getFirefoxDriver(driverSettings: IDriverSetting): Promise<WebDriver> {
 
     const {headless} = driverSettings;
 
@@ -91,7 +91,7 @@ export async function getFirefoxDriver(driverSettings: DriverSettings) {
  * Return a built driver object using firefox
  * Configured to be headless, allow insecure certs always accept alerts
  */
-export async function getDriver(testBrowser: string = 'firefox', driverSettings: DriverSettings = defaultSettings) {
+export async function getDriver(testBrowser: string = 'firefox', driverSettings: IDriverSetting = DEFAULT_DRIVER_SETTING):Promise<WebDriver|void> {
     console.log(`Browser: ${testBrowser}`);
 
     let driver;
