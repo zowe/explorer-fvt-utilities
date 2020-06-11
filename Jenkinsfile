@@ -28,7 +28,7 @@ node('ibm-jenkins-slave-nvm') {
   pipeline.build(
     operation: {
       ansiColor('xterm') {
-        sh "npm run build"
+        pipeline.nvmShell "npm run build"
       }
     }
   )
