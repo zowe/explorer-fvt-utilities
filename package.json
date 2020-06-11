@@ -23,9 +23,10 @@
     "expect": "^1.20.2",
     "node-fetch": "^2.6.0",
     "typescript": "^3.7.5",
-    "geckodriver": "^1.19.1",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "mocha": "^6.1.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "geckodriver": "^1.19.1"
+  }
 }
