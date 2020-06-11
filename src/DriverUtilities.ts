@@ -13,10 +13,10 @@ import https = require('https');
 import fetch from 'node-fetch';
 
 require('geckodriver');
-// require('chromedriver');
+require('chromedriver');
 
 const firefox = require('selenium-webdriver/firefox');
-// const chrome = require('selenium-webdriver/chrome');
+const chrome = require('selenium-webdriver/chrome');
 
 
 interface DriverSettings {
@@ -25,7 +25,7 @@ interface DriverSettings {
 
 const defaultSettings: DriverSettings = {headless: true};
 
-/*async function getChromeDriver(driverSettings: DriverSettings) {
+async function getChromeDriver(driverSettings: DriverSettings) {
 
     const {headless} = driverSettings;
 
@@ -58,7 +58,7 @@ const defaultSettings: DriverSettings = {headless: true};
         .build();
 
     return driver;
-}*/
+}
 
 export async function getFirefoxDriver(driverSettings: DriverSettings) {
 
@@ -98,10 +98,11 @@ export async function getDriver(testBrowser: string = 'firefox', driverSettings:
     if (testBrowser === 'firefox') {
         driver = await getFirefoxDriver(driverSettings);
     } 
-    /*else if (testBrowser === 'chrome') {
+    else if (testBrowser === 'chrome') {
         driver = await getChromeDriver(driverSettings);
-    }*/
+    }
     else {
+        console.log(`Unsupported browser: ${testBrowser}`);
         assert.isTrue(false, `Unsupported browser ${testBrowser}`);
     }
     return driver;
