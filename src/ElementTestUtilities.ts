@@ -91,7 +91,7 @@ export async function testElementIsNotVisibleByCss(driver :WebDriver, css :strin
  */
 export async function testWindowHeightChangeForcesComponentHeightChange(driver :WebDriver, componentId :string, offset :number) {
     let allResized = true;
-    for (let i = 300; i <= 1000 && allResized; i += 100) {
+    for (let i = 300; i <= 800 && allResized; i += 100) {
         await driver.manage().window().setRect({ width: 1600, height: i });
         await driver.sleep(500); // let the dom update after resize
         const contentViewer = await driver.findElement(By.id(componentId));
