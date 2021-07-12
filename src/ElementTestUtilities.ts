@@ -82,7 +82,7 @@ export async function testElementIsNotVisibleByCss(driver :WebDriver, css :strin
 }
 
 /**
- * Manipulate the window size between 300 & 1000 whilst expecting the height of 
+ * Manipulate the window size between 300 & 800 whilst expecting the height of 
  * a html component changes size accordingly
  * 
  * @param {WebDriver} driver selenium-webdriver
