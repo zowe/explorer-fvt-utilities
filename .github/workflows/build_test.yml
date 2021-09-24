@@ -82,9 +82,6 @@ jobs:
         uses: zowe-actions/nodejs-actions/publish@main
         with: 
           perform-release: ${{ github.event.inputs.PERFORM_RELEASE }}
-        env:
-          DEBUG: 'zowe-actions:nodejs-actions:publish'
-
 
       - name: '[Release 1] Release (if necessary)'
         if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' }}
