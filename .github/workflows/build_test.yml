@@ -62,7 +62,7 @@ jobs:
           node-version: 10.18.1
 
       - name: '[Setup] NodeJS project setup'
-        uses: zowe-actions/nodejs-actions/setup@make-ir-optional
+        uses: zowe-actions/nodejs-actions/setup@main
         with:
           package-name: 'org.zowe.explorer-fvt-utilities'
           publish-registry-email: ${{ secrets.NPM_PRIVATE_REGISTRY_EMAIL }}
@@ -72,14 +72,15 @@ jobs:
       - name: '[Build] Nodejs project build'
         run: npm run build
       
-      # - name: '[Publish] Publish'
-      #   uses: zowe-actions/shared-actions/publish@main
+      # note: this step is not actually doing upload to artifactory because no artifact input is provided.
+      # this is just to parse and create a PUBLISH_VERSION then export, later NPM publish step can use.
+      - name: '[Build] Nodejs project build'
+        uses: zowe-actions/shared-actions/publish@main    
+
+      # - name: '[Publish] NPM Publish'
       #   if: success()
-      #   with:
-      #     artifacts: |
-      #       .pax/explorer-ip.pax
-      #       .pax/explorer-ip.tar
-      #     perform-release: ${{ github.event.inputs.PERFORM_RELEASE }}
+      #   uses: zowe-actions/nodejs-actions/publish@publish
+      #   with: 
 
       - name: '[Release 1] Release (if necessary)'
         if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' }}
