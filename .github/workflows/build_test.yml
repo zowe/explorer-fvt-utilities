@@ -77,10 +77,11 @@ jobs:
       - name: '[Build] Nodejs project build'
         uses: zowe-actions/shared-actions/publish@main    
 
-      # - name: '[Publish] NPM Publish'
-      #   if: success()
-      #   uses: zowe-actions/nodejs-actions/publish@publish
-      #   with: 
+      - name: '[Publish] NPM Publish'
+        if: success()
+        uses: zowe-actions/nodejs-actions/publish@publish
+        with: 
+          perform-release: ${{ github.event.inputs.PERFORM_RELEASE }}
 
       - name: '[Release 1] Release (if necessary)'
         if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' }}
