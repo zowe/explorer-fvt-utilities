@@ -76,6 +76,8 @@ jobs:
       # this is just to parse and create a PUBLISH_VERSION then export, later NPM publish step can use.
       - name: '[Publish 1] Regular project publish'
         uses: zowe-actions/shared-actions/publish@main
+        with: 
+          perform-release: ${{ github.event.inputs.PERFORM_RELEASE }}
 
       - name: '[Publish 2] NPM Publish'
         if: success()
