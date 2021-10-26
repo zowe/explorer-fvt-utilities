@@ -102,7 +102,7 @@ services:
     image: "zowe-docker-release.jfrog.io/ompzowe/gateway-service:latest-ubuntu"
 
 EOF
-docker compose up
+docker compose up &
 
 ################################################################################
 # echo "[${SCRIPT_NAME}] start APIML API Catalog"
