@@ -13,8 +13,8 @@
 ################################################################################
 # contants
 SCRIPT_NAME=$(basename "$0")
-DEFAULT_FVT_DISCOVERY_PORT=7552
-DEFAULT_FVT_CATALOG_PORT=7553
+DEFAULT_FVT_DISCOVERY_PORT=7553
+DEFAULT_FVT_CATALOG_PORT=7552
 DEFAULT_FVT_GATEWAY_PORT=7554
 DEFAULT_FVT_ML_DEBUG_PROFILES="default"
 
@@ -56,71 +56,53 @@ if [ -z "${APIML_LOGS_DIR}" ]; then
   exit 1
 fi
 
-################################################################################
-echo "[${SCRIPT_NAME}] start APIML discovery server"
-# -Xquickstart \
-java -Xms32m -Xmx256m \
-    -Dibm.serversocket.recover=true \
-    -Dfile.encoding=UTF-8 \
-    -Djava.io.tmpdir=/tmp \
-    -Dspring.profiles.active=https \
-    -Dspring.profiles.include=${API_ML_DEBUG_PROFILES} \
-    -Dserver.address=0.0.0.0 \
-    -Dapiml.discovery.userid=eureka \
-    -Dapiml.discovery.password=password \
-    -Dapiml.discovery.allPeersUrls="https://localhost:${FVT_DISCOVERY_PORT}/eureka/" \
-    -Dapiml.service.hostname=localhost \
-    -Dapiml.service.port=${FVT_DISCOVERY_PORT} \
-    -Dapiml.service.ipAddress=127.0.0.1 \
-    -Dapiml.service.preferIpAddress=true \
-    -Dapiml.discovery.staticApiDefinitionsDirectories="${APIML_CONFIGS_DIR}" \
-    -Dapiml.security.ssl.verifySslCertificatesOfServices=false \
-    -Dserver.ssl.enabled=true \
-    -Dserver.ssl.keyStore="${KEYSTORE_DIR}/localhost.keystore.p12" \
-    -Dserver.ssl.keyStoreType=PKCS12 \
-    -Dserver.ssl.keyStorePassword=password \
-    -Dserver.ssl.keyAlias=localhost \
-    -Dserver.ssl.keyPassword=password \
-    -Dserver.ssl.trustStore="${KEYSTORE_DIR}/localhost.truststore.p12" \
-    -Dserver.ssl.trustStoreType=PKCS12 \
-    -Dserver.ssl.trustStorePassword=password \
-    -Djava.protocol.handler.pkgs=com.ibm.crypto.provider \
-    -jar "${APIML_ROOT_DIR}/discovery-service.jar" \
-    > "${APIML_LOGS_DIR}/discovery-service.log" &
-echo
+cat > "docker-compose.yml" << EOF
+version: "3.9"
+services:
+  discovery-service:
+    ports:
+      - ${FVT_DISCOVERY_PORT}:${FVT_DISCOVERY_PORT}
+    volumes:
+      - ${APIML_CONFIGS_DIR}:/api-defs
+      - ${KEYSTORE_DIR}:/keystore
+    environment:
+      CMMN_LB: apiml-common-lib/bin/api-layer-lite-lib-all.jar
+      ZWE_DISCOVERY_SERVICES_LIST: "https://discovery-service:${FVT_DISCOVERY_PORT}/eureka/"
+      WORKSPACE_DIR: "/tmp"
+      DISCOVERY_PORT: ${FVT_DISCOVERY_PORT}
+      STATIC_DEF_CONFIG_DIR: /api-defs
+      KEYSTORE: "/keystore/localhost.keystore.p12"
+      KEYSTORE_PASSWORD: password
+      KEY_ALIAS: localhost
+      TRUSTSTORE: "/keystore/localhost.truststore.p12"
+      VERIFY_CERTIFICATES: "false"
+      NONSTRICT_VERIFY_CERTIFICATES: "false"
+      APIML_DIAG_MODE_ENABLED: ${API_ML_DEBUG_PROFILES}
+    image: "zowe-docker-release.jfrog.io/ompzowe/discovery-service:latest-ubuntu"
 
-################################################################################
-echo "[${SCRIPT_NAME}] start APIML gateway server"
-# -Xquickstart \
-java -Xms32m -Xmx256m \
-    -Dibm.serversocket.recover=true \
-    -Dfile.encoding=UTF-8 \
-    -Djava.io.tmpdir=/tmp \
-    -Dspring.profiles.include=${API_ML_DEBUG_PROFILES} \
-    -Dapiml.service.hostname=localhost \
-    -Dapiml.service.port=${FVT_GATEWAY_PORT} \
-    -Dapiml.service.discoveryServiceUrls="https://localhost:${FVT_DISCOVERY_PORT}/eureka/" \
-    -Dapiml.service.preferIpAddress=true \
-    -Dapiml.service.allowEncodedSlashes=false \
-    -Dapiml.cache.storage.location=${APIML_LOGS_DIR}/ \
-    -Denvironment.ipAddress=127.0.0.1 \
-    -Dapiml.gateway.timeoutMillis=30000 \
-    -Dapiml.security.ssl.verifySslCertificatesOfServices=false \
-    -Dapiml.security.auth.zosmfServiceId=zosmf \
-    -Dserver.address=0.0.0.0 \
-    -Dserver.ssl.enabled=true \
-    -Dserver.ssl.keyStore="${KEYSTORE_DIR}/localhost.keystore.p12" \
-    -Dserver.ssl.keyStoreType=PKCS12 \
-    -Dserver.ssl.keyStorePassword=password \
-    -Dserver.ssl.keyAlias=localhost \
-    -Dserver.ssl.keyPassword=password \
-    -Dserver.ssl.trustStore="${KEYSTORE_DIR}/localhost.truststore.p12" \
-    -Dserver.ssl.trustStoreType=PKCS12 \
-    -Dserver.ssl.trustStorePassword=password \
-    -Djava.protocol.handler.pkgs=com.ibm.crypto.provider \
-    -jar "${APIML_ROOT_DIR}/gateway-service.jar" \
-    > "${APIML_LOGS_DIR}/gateway-service.log"  &
-echo
+  gateway-service:
+    ports:
+      - ${FVT_GATEWAY_PORT}:${FVT_GATEWAY_PORT}
+    volumes:
+      - ${APIML_CONFIGS_DIR}:/api-defs
+      - ${KEYSTORE_DIR}:/keystore
+    environment:
+      CMMN_LB: apiml-common-lib/bin/api-layer-lite-lib-all.jar
+      GATEWAY_SERVICE_PORT: ${FVT_GATEWAY_PORT}
+      ZWE_DISCOVERY_SERVICES_LIST: "https://discovery-service:${FVT_DISCOVERY_PORT}/eureka/"
+      KEYSTORE: "/keystore/localhost.keystore.p12"
+      KEYSTORE_PASSWORD: password
+      ZOWE_EXPLORER_HOST: gateway-service
+      WORKSPACE_DIR: "/tmp"
+      KEY_ALIAS: localhost
+      TRUSTSTORE: "/keystore/localhost.truststore.p12"
+      VERIFY_CERTIFICATES: "false"
+      NONSTRICT_VERIFY_CERTIFICATES: "false"
+      APIML_DIAG_MODE_ENABLED: ${API_ML_DEBUG_PROFILES}
+    image: "zowe-docker-release.jfrog.io/ompzowe/gateway-service:latest-ubuntu"
+
+EOF
+docker compose up
 
 ################################################################################
 # echo "[${SCRIPT_NAME}] start APIML API Catalog"
