@@ -100,9 +100,7 @@ services:
       NONSTRICT_VERIFY_CERTIFICATES: "false"
       APIML_DIAG_MODE_ENABLED: ${API_ML_DEBUG_PROFILES}
     image: "zowe-docker-release.jfrog.io/ompzowe/gateway-service:latest-ubuntu"
-
 EOF
-docker compose up &
 
 ################################################################################
 # echo "[${SCRIPT_NAME}] start APIML API Catalog"
