@@ -7,7 +7,7 @@
 #
 # SPDX-License-Identifier: EPL-2.0
 #
-# Copyright IBM Corporation 2020
+# Copyright IBM Corporation 2021
 ################################################################################
 
 ################################################################################
@@ -20,7 +20,7 @@ DEFAULT_FVT_ML_DEBUG_PROFILES="default"
 
 ################################################################################
 # variables
-APIML_ROOT_DIR=$1
+FVT_WORKSPACE_DIR=$1
 KEYSTORE_DIR=$2
 APIML_CONFIGS_DIR=$3
 APIML_LOGS_DIR=$4
@@ -39,8 +39,8 @@ if [ -z "${API_ML_DEBUG_PROFILES}" ]; then
   API_ML_DEBUG_PROFILES="${DEFAULT_FVT_ML_DEBUG_PROFILES}"
 fi
 # validate
-if [ -z "${APIML_ROOT_DIR}" ]; then
-  echo "[${SCRIPT_NAME}][Error] parameter #1 (apiml root directory) is required" >&2
+if [ -z "${FVT_WORKSPACE_DIR}" ]; then
+  echo "[${SCRIPT_NAME}][Error] parameter #1 (fvt workspace directory) is required" >&2
   exit 1
 fi
 if [ -z "${KEYSTORE_DIR}" ]; then
@@ -56,7 +56,7 @@ if [ -z "${APIML_LOGS_DIR}" ]; then
   exit 1
 fi
 
-cat > "docker-compose.yml" << EOF
+cat > "$FVT_WORKSPACE_DIR/docker-compose.yml" << EOF
 version: "3.9"
 services:
   discovery-service:
