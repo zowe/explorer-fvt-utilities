@@ -78,7 +78,7 @@ services:
       VERIFY_CERTIFICATES: "false"
       NONSTRICT_VERIFY_CERTIFICATES: "false"
       APIML_DIAG_MODE_ENABLED: ${API_ML_DEBUG_PROFILES}
-    image: "zowe-docker-release.jfrog.io/ompzowe/discovery-service:latest-ubuntu"
+    image: "zowe-docker-release.jfrog.io/ompzowe/discovery-service:2-ubuntu"
 
   gateway-service:
     ports:
@@ -99,7 +99,7 @@ services:
       VERIFY_CERTIFICATES: "false"
       NONSTRICT_VERIFY_CERTIFICATES: "false"
       APIML_DIAG_MODE_ENABLED: ${API_ML_DEBUG_PROFILES}
-    image: "zowe-docker-release.jfrog.io/ompzowe/gateway-service:latest-ubuntu"
+    image: "zowe-docker-release.jfrog.io/ompzowe/gateway-service:2-ubuntu"
 EOF
 
 ################################################################################
