@@ -76,7 +76,7 @@ keytool -gencert -v \
   -keypass "${CA_PASSWORD}" \
   -storepass "${CA_PASSWORD}" \
   -storetype PKCS12 \
-  -ext "SAN=dns:localhost,ip:127.0.0.1" \
+  -ext "SAN=dns:localhost,dns:discovery-service,dns:gateway-service,dns:app-server,ip:127.0.0.1" \
   -ext "KeyUsage:critical=keyEncipherment,digitalSignature,nonRepudiation,dataEncipherment" \
   -ext "ExtendedKeyUsage=clientAuth,serverAuth" \
   -rfc \

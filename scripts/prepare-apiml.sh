@@ -68,16 +68,17 @@ services:
     environment:
       CMMN_LB: apiml-common-lib/bin/api-layer-lite-lib-all.jar
       ZWE_DISCOVERY_SERVICES_LIST: "https://discovery-service:${FVT_DISCOVERY_PORT}/eureka/"
-      WORKSPACE_DIR: "/tmp"
-      DISCOVERY_PORT: ${FVT_DISCOVERY_PORT}
-      STATIC_DEF_CONFIG_DIR: /api-defs
-      KEYSTORE: "/keystore/localhost.keystore.p12"
-      KEYSTORE_PASSWORD: password
-      KEY_ALIAS: localhost
-      TRUSTSTORE: "/keystore/localhost.truststore.p12"
-      VERIFY_CERTIFICATES: "false"
-      NONSTRICT_VERIFY_CERTIFICATES: "false"
-      APIML_DIAG_MODE_ENABLED: ${API_ML_DEBUG_PROFILES}
+      ZWE_zowe_logDirectory: "/tmp"
+      ZWE_haInstance_hostname: "localhost"
+      ZWE_configs_port: ${FVT_DISCOVERY_PORT}
+      ZWE_STATIC_DEFINITIONS_DIR: /api-defs
+      ZWE_zowe_certificate_keystore_file: "/keystore/localhost.keystore.p12"
+      ZWE_zowe_certificate_keystore_password: password
+      ZWE_zowe_certificate_keystore_alias: localhost
+      ZWE_zowe_certificate_truststore_file: "/keystore/localhost.truststore.p12"
+      ZWE_zowe_certificate_truststore_password: password
+      ZWE_zowe_verifyCertificates: "DISABLED"
+      ZWE_configs_debug: ${API_ML_DEBUG_PROFILES}
     image: "zowe-docker-release.jfrog.io/ompzowe/discovery-service:2-ubuntu"
 
   gateway-service:
@@ -88,17 +89,18 @@ services:
       - ${KEYSTORE_DIR}:/keystore
     environment:
       CMMN_LB: apiml-common-lib/bin/api-layer-lite-lib-all.jar
-      GATEWAY_SERVICE_PORT: ${FVT_GATEWAY_PORT}
       ZWE_DISCOVERY_SERVICES_LIST: "https://discovery-service:${FVT_DISCOVERY_PORT}/eureka/"
-      KEYSTORE: "/keystore/localhost.keystore.p12"
-      KEYSTORE_PASSWORD: password
-      ZOWE_EXPLORER_HOST: gateway-service
-      WORKSPACE_DIR: "/tmp"
-      KEY_ALIAS: localhost
-      TRUSTSTORE: "/keystore/localhost.truststore.p12"
-      VERIFY_CERTIFICATES: "false"
-      NONSTRICT_VERIFY_CERTIFICATES: "false"
-      APIML_DIAG_MODE_ENABLED: ${API_ML_DEBUG_PROFILES}
+      ZWE_zowe_logDirectory: "/tmp"
+      ZWE_zowe_workspaceDirectory: "/tmp"
+      ZWE_haInstance_hostname: gateway-service
+      ZWE_configs_port: ${FVT_GATEWAY_PORT}
+      ZWE_zowe_certificate_keystore_file: "/keystore/localhost.keystore.p12"
+      ZWE_zowe_certificate_keystore_password: password
+      ZWE_zowe_certificate_keystore_alias: localhost
+      ZWE_zowe_certificate_truststore_file: "/keystore/localhost.truststore.p12"
+      ZWE_zowe_certificate_truststore_password: password
+      ZWE_zowe_verifyCertificates: "DISABLED"
+      ZWE_configs_debug: ${API_ML_DEBUG_PROFILES}
     image: "zowe-docker-release.jfrog.io/ompzowe/gateway-service:2-ubuntu"
 EOF
 
