@@ -77,7 +77,7 @@ services:
       TRUSTSTORE: "/keystore/localhost.truststore.p12"
       VERIFY_CERTIFICATES: "false"
       NONSTRICT_VERIFY_CERTIFICATES: "false"
-      APIML_DIAG_MODE_ENABLED: ${API_ML_DEBUG_PROFILES}
+      APIML_DIAG_MODE_ENABLED: "DEBUG"
     image: "zowe-docker-release.jfrog.io/ompzowe/discovery-service:1-ubuntu"
 
   gateway-service:
