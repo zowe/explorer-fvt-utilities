@@ -132,7 +132,7 @@ export async function setApimlAuthTokenCookie(driver :WebDriver, username :strin
     await loadPage(driver, appPageUrl); // Make sure we're on the correct domain to set the cookie
     console.log('Authentication endpoint: ' + loginEndpoint);
     const agent = new https.Agent({
-        rejectUnauthorized: false,
+        rejectUnauthorized: true,
     });
     await fetch(loginEndpoint, 
         {
