@@ -1,6 +1,6 @@
 {
   "name": "explorer-fvt-utilities",
-  "version": "0.0.1-mark-testdeploy",
+  "version": "0.0.99",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": "zowe/explorer-fvt-utilities",
