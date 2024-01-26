@@ -62,7 +62,7 @@ jobs:
       - name: '[Prep 5] Setup Node'
         uses: actions/setup-node@v2
         with:
-          node-version: 10.18.1
+          node-version: 20
 
       - name: '[Setup] NodeJS project setup'
         uses: zowe-actions/nodejs-actions/setup@main
@@ -74,7 +74,14 @@ jobs:
       
       - name: '[Build] Nodejs project build'
         run: npm run build
-      
+
+      # note: this step is not actually doing upload to artifactory because no artifact input is provided.
+      # this is just to parse and create a PUBLISH_VERSION then export, later NPM publish step can use.
+      - name: '[DEBUG 1] Dump debug information'
+        run: |
+          node --version
+          npm --version
+
       # note: this step is not actually doing upload to artifactory because no artifact input is provided.
       # this is just to parse and create a PUBLISH_VERSION then export, later NPM publish step can use.
       - name: '[Publish 1] Regular project publish'
