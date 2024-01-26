@@ -88,6 +88,8 @@ jobs:
         with: 
           perform-release: ${{ github.event.inputs.PERFORM_RELEASE }}
           sigstore-npm-provenance: true
+        env:
+          DEBUG: zowe-actions:*
 
       - name: '[Release 1] Release (if necessary)'
         if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' }}
