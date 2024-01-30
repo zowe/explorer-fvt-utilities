@@ -60,7 +60,7 @@ jobs:
         uses: zowe-actions/shared-actions/prepare-workflow@main
 
       - name: '[Prep 5] Setup Node'
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@main
         with:
           node-version: 20
         env:
