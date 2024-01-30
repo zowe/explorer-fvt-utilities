@@ -64,7 +64,7 @@ jobs:
         with:
           node-version: 20
         env:
-          DEBUG: zowe-actions:*     
+          DEBUG: "*"     
 
       - name: '[Setup] NodeJS project setup'
         uses: zowe-actions/nodejs-actions/setup@main
