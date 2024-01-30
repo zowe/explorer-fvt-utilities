@@ -73,6 +73,8 @@ jobs:
           publish-registry-email: ${{ secrets.NPM_PRIVATE_REGISTRY_EMAIL }}
           publish-registry-username: ${{ secrets.NPM_PRIVATE_REGISTRY_USERNAME }}
           publish-registry-password: ${{ secrets.NPM_PRIVATE_REGISTRY_PASSWORD }}
+        env:
+          DEBUG: "*"     
       
       - name: '[Build] Nodejs project build'
         run: npm run build
