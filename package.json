@@ -3,7 +3,7 @@
   "version": "0.0.99",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "repository": "zowe/explorer-fvt-utilities",
+  "repository": "https://github.com/zowe/explorer-fvt-utilities",
   "description": "Zowe explorer app test utilities",
   "author": "IBM",
   "license": "EPL-2.0",
