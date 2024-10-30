@@ -19,7 +19,7 @@ const firefox = require('selenium-webdriver/firefox');
 const chrome = require('selenium-webdriver/chrome');
 
 export interface IDriverSetting {
-    headless: boolean; // Changed to lowercase 'boolean'
+    headless: boolean;
 }
 
 const DEFAULT_DRIVER_SETTING: IDriverSetting = { headless: true };
@@ -64,9 +64,7 @@ export async function getFirefoxDriver(driverSettings: IDriverSetting): Promise<
 
     // use headless mode
     if (headless) {
-        options.headless(); // Make sure this is correct for your version
-        // Alternatively, you can use:
-        // options.addArguments('-headless');
+        options.addArguments('-headless'); // Correct method to set headless mode
     }
 
     const capabilities = Capabilities.firefox();
@@ -82,7 +80,7 @@ export async function getFirefoxDriver(driverSettings: IDriverSetting): Promise<
         .withCapabilities(capabilities)
         .setFirefoxOptions(options)
         .setFirefoxService(service)
-        .build(); // Ensure build is chained correctly
+        .build();
 
     return driver;
 }
