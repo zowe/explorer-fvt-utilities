@@ -18,25 +18,22 @@ require('chromedriver');
 const firefox = require('selenium-webdriver/firefox');
 const chrome = require('selenium-webdriver/chrome');
 
-
 export interface IDriverSetting {
-    headless: Boolean;
+    headless: boolean; // Changed to lowercase 'boolean'
 }
 
-const DEFAULT_DRIVER_SETTING: IDriverSetting = {headless: true};
+const DEFAULT_DRIVER_SETTING: IDriverSetting = { headless: true };
 
 async function getChromeDriver(driverSettings: IDriverSetting): Promise<WebDriver> {
-
-    const {headless} = driverSettings;
+    const { headless } = driverSettings;
 
     // configure Options
     const options = new chrome.Options();
     options.addArguments("--log-level=3");
     options.addArguments("--silent");
-    // options.setPreference('dom.disable_beforeunload', true);
 
     // use headless mode
-    if(headless) {
+    if (headless) {
         options.headless();
     }
 
@@ -45,9 +42,7 @@ async function getChromeDriver(driverSettings: IDriverSetting): Promise<WebDrive
     capabilities.setAlertBehavior('accept');
 
     // configure ServiceBuilder
-    const service = chrome.setDefaultService(
-        new chrome.ServiceBuilder().build()
-    )
+    const service = chrome.setDefaultService(new chrome.ServiceBuilder().build());
 
     // build driver using options and service
     let driver = await new Builder()
@@ -61,15 +56,17 @@ async function getChromeDriver(driverSettings: IDriverSetting): Promise<WebDrive
 }
 
 export async function getFirefoxDriver(driverSettings: IDriverSetting): Promise<WebDriver> {
-
-    const {headless} = driverSettings;
+    const { headless } = driverSettings;
 
     // configure Options
     const options = new firefox.Options();
     options.setPreference('dom.disable_beforeunload', true);
+
     // use headless mode
-    if(headless) {
-        options.headless();
+    if (headless) {
+        options.headless(); // Make sure this is correct for your version
+        // Alternatively, you can use:
+        // options.addArguments('-headless');
     }
 
     const capabilities = Capabilities.firefox();
@@ -82,38 +79,40 @@ export async function getFirefoxDriver(driverSettings: IDriverSetting): Promise<
     // build driver using options and service
     let driver = await new Builder()
         .forBrowser('firefox')
-        .withCapabilities(capabilities);
-    driver = driver.setFirefoxOptions(options).setFirefoxService(service);
-    return driver.build();
+        .withCapabilities(capabilities)
+        .setFirefoxOptions(options)
+        .setFirefoxService(service)
+        .build(); // Ensure build is chained correctly
+
+    return driver;
 }
 
 /**
  * Return a built driver object using firefox
  * Configured to be headless, allow insecure certs always accept alerts
  */
-export async function getDriver(testBrowser: string = 'firefox', driverSettings: IDriverSetting = DEFAULT_DRIVER_SETTING):Promise<WebDriver|void> {
+export async function getDriver(testBrowser: string = 'firefox', driverSettings: IDriverSetting = DEFAULT_DRIVER_SETTING): Promise<WebDriver | void> {
     console.log(`Browser: ${testBrowser}`);
 
     let driver;
     if (testBrowser === 'firefox') {
         driver = await getFirefoxDriver(driverSettings);
-    } 
-    else if (testBrowser === 'chrome') {
+    } else if (testBrowser === 'chrome') {
         driver = await getChromeDriver(driverSettings);
-    }
-    else {
+    } else {
         console.log(`Unsupported browser: ${testBrowser}`);
         assert.isTrue(false, `Unsupported browser ${testBrowser}`);
     }
     return driver;
 }
+
 /**
  * Given a WebDriver and URL load the page and print the title
  * 
  * @param {WebDriver} driver selenium-webdriver
  * @param {string} page URL of a page to load
  */
-export async function loadPage(driver :WebDriver, page :string) {
+export async function loadPage(driver: WebDriver, page: string) {
     await driver.manage().window().setRect({ width: 1600, height: 800 });
     console.log(`Loading page: ${page}`);
     await driver.get(page);
@@ -128,19 +127,17 @@ export async function loadPage(driver :WebDriver, page :string) {
  * @param password tso password
  * @param driver selenium-webdriver
  */
-export async function setApimlAuthTokenCookie(driver :WebDriver, username :string, password :string, loginEndpoint :string, appPageUrl : string){
+export async function setApimlAuthTokenCookie(driver: WebDriver, username: string, password: string, loginEndpoint: string, appPageUrl: string) {
     await loadPage(driver, appPageUrl); // Make sure we're on the correct domain to set the cookie
     console.log('Authentication endpoint: ' + loginEndpoint);
     const agent = new https.Agent({
         rejectUnauthorized: false,
     });
-    await fetch(loginEndpoint, 
-        {
-            method: 'POST', 
-            body: JSON.stringify({username, password}),
-            agent,
-        }
-    ).then(response => {
+    await fetch(loginEndpoint, {
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+        agent,
+    }).then(response => {
         if (response.ok) {
             return response.headers.get("set-cookie");
         }
@@ -148,14 +145,14 @@ export async function setApimlAuthTokenCookie(driver :WebDriver, username :strin
     }).then(cookies => {
         if (cookies) {
             const cookiesArray = cookies.split(';');
-            const tokenCookie = cookiesArray.find((cookie :string)=> { return cookie.includes('apimlAuthenticationToken')});
+            const tokenCookie = cookiesArray.find((cookie: string) => { return cookie.includes('apimlAuthenticationToken') });
             if (tokenCookie) {
                 const authToken = tokenCookie.split('=')[1];
                 return authToken;
             }
         }
-    }).then (async (authToken) => {
-        if (authToken){
+    }).then(async (authToken) => {
+        if (authToken) {
             await driver.manage().addCookie({ name: 'apimlAuthenticationToken', value: authToken });
         }
     });
@@ -174,9 +171,9 @@ export async function setApimlAuthTokenCookie(driver :WebDriver, username :strin
  * @param {number} serverHttpsPort https port of system under test
  * @param {string} usernameEndpoint endpoint of username api that can be used to cache login credentials e.g /api/v1/jobs/username
  */
-export async function checkDriver(driver :WebDriver, baseURL :string, 
-    username :string, password :string, serverHostName :string, serverHttpsPort :number, 
-    usernameEndpoint :string, testBrowser: string) {
+export async function checkDriver(driver: WebDriver, baseURL: string,
+    username: string, password: string, serverHostName: string, serverHttpsPort: number,
+    usernameEndpoint: string, testBrowser: string) {
     try {
         await driver.get(`https://${username}:${password}@${serverHostName}:${serverHttpsPort}${usernameEndpoint}`);
         await loadPage(driver, baseURL);
