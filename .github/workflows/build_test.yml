@@ -1,8 +1,13 @@
 name: Build and Test Workflow
+permissions:
+  id-token: write
+  issues: write
+  pull-requests: write
+  contents: write
 on:
   push:
     branches:
-      - master 
+      - v3.x/master 
   pull_request:
     types: [opened, synchronize]
   workflow_dispatch:
@@ -71,6 +76,9 @@ jobs:
           publish-registry-email: ${{ secrets.NPM_PRIVATE_REGISTRY_EMAIL }}
           publish-registry-username: ${{ secrets.NPM_PRIVATE_REGISTRY_USERNAME }}
           publish-registry-password: ${{ secrets.NPM_PRIVATE_REGISTRY_PASSWORD }}
+          NPM_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+          NPM_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          NPM_EMAIL: ${{ secrets.ZOWE_ROBOT_EMAIL }}
       
       - name: '[Build] Nodejs project build'
         run: npm run build
