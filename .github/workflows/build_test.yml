@@ -73,6 +73,9 @@ jobs:
         uses: zowe-actions/nodejs-actions/setup@main
         with:
           package-name: 'org.zowe.explorer-fvt-utilities'
+          publish-registry-email: ${{ secrets.ZOWE_ROBOT_EMAIL }}
+          publish-registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          publish-registry-password: ${{ secrets.ARTIFACTORY_PASSWORD }}
 
       
       - name: '[Build] Nodejs project build'
