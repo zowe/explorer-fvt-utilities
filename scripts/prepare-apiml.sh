@@ -56,7 +56,7 @@ if [ -z "${APIML_LOGS_DIR}" ]; then
   exit 1
 fi
 
-cat > "$FVT_WORKSPACE_DIR/docker-compose.yml" << EOF
+cat >"$FVT_WORKSPACE_DIR/docker-compose.yml" <<EOF
 version: "3.9"
 services:
   discovery-service:
@@ -79,7 +79,7 @@ services:
       ZWE_zowe_certificate_truststore_password: password
       ZWE_zowe_verifyCertificates: "DISABLED"
       ZWE_configs_debug: ${API_ML_DEBUG_PROFILES}
-    image: "zowe-docker-release.jfrog.io/ompzowe/discovery-service:2-ubuntu"
+    image: "zowe-docker-release.jfrog.io/ompzowe/discovery-service:3-ubuntu"
 
   gateway-service:
     ports:
@@ -101,7 +101,7 @@ services:
       ZWE_zowe_certificate_truststore_password: password
       ZWE_zowe_verifyCertificates: "DISABLED"
       ZWE_configs_debug: ${API_ML_DEBUG_PROFILES}
-    image: "zowe-docker-release.jfrog.io/ompzowe/gateway-service:2-ubuntu"
+    image: "zowe-docker-release.jfrog.io/ompzowe/gateway-service:3-ubuntu"
 EOF
 
 ################################################################################
